@@ -17,7 +17,53 @@ def kNNClassify(newInput, dataSet, labels, k):
     # Input your code here #
     ########################
     
+   # Calculate the L2 distance
+    def getL2Distance(pair1, pair2):
+        sub=np.subtract(pair1,pair2,dtype=int)
+        sq=np.multiply(sub,sub)
+        accu=np.sum(sq)
+        return np.sqrt(accu)
+
+
+    # Get the most common element in a given list
+    def getMostCommon(label_list):
+        # Initialize a dictionary from a given list.
+        # Keys: Set of the list, Values: 0.
+        occurance=dict.fromkeys(set(label_list), 0)
+        # Count the occurance of each unique element
+        for i in label_list:
+            occurance[i]+=1
+        print("Occurance Dictionary", occurance)
+        return max(occurance, key=lambda x: occurance.get(x))
     
+    # Predict the label of the input
+    def predict(test_data):
+        # print("Input", input)
+        
+        # Calculate the distances between all training data
+        distances=[]
+        for pair in dataSet:
+            distance=getL2Distance(test_data, pair)
+            distances.append(distance)
+
+        # Get the indices of the k nearest neighbors in the original list
+        indices=np.array(distances).argsort()[:k]
+        
+        filtered_distances=np.take(distances,indices)
+        print("Distances", filtered_distances)
+        
+        # Get the labels of the k nearest neighbors
+        kLabels=np.take(labels,indices)
+        print("KLabels", kLabels)
+        
+        # Get the most common label among the k nearest neighbors
+        return getMostCommon(kLabels)
+    
+    for i in range(len(newInput)):
+        prediction = predict(newInput[i])
+        print("Prediction", prediction, "Actual", y_test[i])
+        result.append(prediction)
+        print("")
     
     ####################
     # End of your code #

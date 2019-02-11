@@ -13,11 +13,6 @@ mini_train_label = np.load('knn_minitrain_label.npy')
 mini_test = np.random.randint(20, size=20)
 mini_test = mini_test.reshape(10,2)
 
-print("DATA", mini_train)
-print("LABEL",mini_train_label)
-
-def getL2Distance(pair1, pair2):
-    return np.sqrt(np.sum( np.power(np.subtract(pair1,pair2),2) ))
 
 # Define knn classifier
 def kNNClassify(newInput, dataSet, labels, k):
@@ -25,18 +20,50 @@ def kNNClassify(newInput, dataSet, labels, k):
     ########################
     # Input your code here #
     ########################
-    for input in newInput:
+     # Calculate the L2 distance
+    def getL2Distance(pair1, pair2):
+        return np.sqrt(np.sum(np.power(np.subtract(pair1,pair2),2)))
+
+    # Get the most common element in a given list
+    def getMostCommon(labels):
+        # Initialize a dictionary from a given list.
+        # Keys: Set of the list, Values: 0.
+        occurance=dict.fromkeys(set(labels),0)
+        # Count the occurance of each unique element
+        for i in labels:
+            occurance[i]+=1
+        print("Occurance Dictionary", occurance)
+        return max(occurance, key=lambda x: occurance.get(x))
+    
+    # Predict the label of the input
+    def predict(input):
+        print("Input", input)
+        
+        # Calculate the distances between all training data
         distances=[]
         for pair in dataSet:
             distance=getL2Distance(input, pair)
             distances.append(distance)
-        indices=np.array(distances).argsort()[:k]
-        print("INDICES", indices)
-        
-        print(distances)
-        kLabels=labels[indices]
-        print(kLabels)
+        print("Distance", distances)
 
+        # Get the indices of the k nearest neighbors in the original list
+        indices=np.array(distances).argsort()[:k]
+        print("Indices", indices)
+        
+        # Get the labels of the k nearest neighbors
+        kLabels=labels[indices]
+        print("KLabels", kLabels)
+        
+        # Get the most common label among the k nearest neighbors
+        return getMostCommon(kLabels)
+    
+    for input in newInput:
+        prediction = predict(input)
+        print("Prediction", prediction)
+        result.append(prediction)
+        print("")
+    
+    
     ####################
     # End of your code #
     ####################
