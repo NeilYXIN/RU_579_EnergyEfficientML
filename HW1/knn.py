@@ -19,10 +19,8 @@ def kNNClassify(newInput, dataSet, labels, k):
     
    # Calculate the L2 distance
     def getL2Distance(pair1, pair2):
-        sub=np.subtract(pair1,pair2,dtype=int)
-        sq=np.multiply(sub,sub)
-        accu=np.sum(sq)
-        return np.sqrt(accu)
+        return np.sqrt(np.sum(np.power(np.subtract(pair1,pair2, dtype=int),2)))
+
 
 
     # Get the most common element in a given list
