@@ -14,8 +14,6 @@ def L2(x):
     print("L2", np.sum(squared), "\n")
     return np.sum(squared)
 
-
-
 def foward_prop(W, x):
     w_times_x = W_times_x(W, x)
     sigmoid_w_times_x = sigmoid(w_times_x)
@@ -57,8 +55,6 @@ def back_prop(foward_dict):
     print("Gradients:")
     print("W", grad_W)
     print("x", grad_x)
-
-
 
 W = [
     [1.0, 1.0, 1.0],
