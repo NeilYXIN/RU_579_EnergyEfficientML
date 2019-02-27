@@ -6,7 +6,6 @@ def W_times_x(W, x):
     return np.matmul(W, x)
 
 def sigmoid(x):
-    print("Sigmoid", math.e**x/(math.e**x + 1), "\n")
     return math.e**x/(math.e**x + 1)
 
 def L2(x):
@@ -17,6 +16,8 @@ def L2(x):
 def foward_prop(W, x):
     w_times_x = W_times_x(W, x)
     sigmoid_w_times_x = sigmoid(w_times_x)
+    print("Sigmoid", sigmoid_w_times_x, "\n")
+
     L2_sigmoid = L2(sigmoid_w_times_x)
     print("Forward propagation", L2_sigmoid, "\n")
     return {
