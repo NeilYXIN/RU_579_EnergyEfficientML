@@ -33,7 +33,7 @@ class LeNet(nn.Module):
         ############################
         #### Put your code here ####
         ############################
-        self.input_bn = nn.BatchNorm2d(3) # Batch Normalization Layer
+        # self.input_bn = nn.BatchNorm2d(3) # Batch Normalization Layer
         self.conv1 = nn.Conv2d(3, 6, kernel_size=5)
         self.conv2 = nn.Conv2d(6, 16, kernel_size=5)
         self.conv3 = nn.Conv2d(16, 120, kernel_size=5)
@@ -50,8 +50,8 @@ class LeNet(nn.Module):
         ############################
         #### Put your code here ####
         ############################
-        #out = F.relu(self.conv1(x))
-        out = F.relu(self.conv1(self.input_bn(x))) # Batch Normalization Layer
+        out = F.relu(self.conv1(x))
+        # out = F.relu(self.conv1(self.input_bn(x))) # Batch Normalization Layer
         out = F.max_pool2d(out, 2)
         out = F.relu(self.conv2(out))
         out = F.max_pool2d(out, 2)
