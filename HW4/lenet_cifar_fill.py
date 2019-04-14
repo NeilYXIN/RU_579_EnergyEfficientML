@@ -6,6 +6,7 @@ import torch.optim as optim
 import torchvision 
 import torchvision.transforms as transforms
 import time
+from torch.autograd import Variable
 
 # Preparing for Data
 print('==> Preparing data..')
@@ -32,8 +33,14 @@ class LeNet(nn.Module):
         ############################
         #### Put your code here ####
         ############################
-        
-        
+        self.input_bn = nn.BatchNorm2d(3) # Batch Normalization Layer
+        self.conv1 = nn.Conv2d(3, 6, kernel_size=5)
+        self.conv2 = nn.Conv2d(6, 16, kernel_size=5)
+        self.conv3 = nn.Conv2d(16, 120, kernel_size=5)
+
+        self.fc1 = nn.Linear(120, 84)
+        self.fc2 = nn.Linear(84, 10)
+
         
         ###########################
         #### End of your codes ####
@@ -43,9 +50,17 @@ class LeNet(nn.Module):
         ############################
         #### Put your code here ####
         ############################
-        
-        
-        
+        #out = F.relu(self.conv1(x))
+        out = F.relu(self.conv1(self.input_bn(x))) # Batch Normalization Layer
+        out = F.max_pool2d(out, 2)
+        out = F.relu(self.conv2(out))
+        out = F.max_pool2d(out, 2)
+        out = F.relu(self.conv3(out))
+        out = out.view(out.size(0), -1)
+        out = F.relu(self.fc1(out))
+        # out = F.dropout(out, p=0.5)   # Dropout Layer
+        out = F.log_softmax(self.fc2(out), dim = -1)
+
         ###########################
         #### End of your codes ####
         ###########################
@@ -63,7 +78,16 @@ def train(model, device, train_loader, optimizer, epoch):
         ############################
         #### Put your code here ####
         ############################
-        
+
+        data, target = Variable(data), Variable(target)
+
+        optimizer.zero_grad()
+        output = model(data)
+        # loss
+        loss = F.nll_loss(output, target)
+        loss.backward()
+        # update
+        optimizer.step()
         
         
         ###########################
@@ -97,7 +121,7 @@ def main():
     batch_size = 128
     epochs = 50
     lr = 0.05
-    no_cuda = True
+    no_cuda = False
     save_model = False
     use_cuda = not no_cuda and torch.cuda.is_available()
     torch.manual_seed(100)
